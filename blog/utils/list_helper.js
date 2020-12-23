@@ -45,9 +45,33 @@ const mostBlogs = (blogsList) => {
   }
 }
 
+const mostLikes = (blogsList) => {
+  if (blogsList.length !== 0) {
+    const blogs = blogsList.map((x) => ({
+      author: x.author,
+      likes: x.likes,
+    }))
+    const like = _.map(
+      _.groupBy(blogs, (value) => value.author),
+      (val, key) => ({
+        author: key,
+        likes: val.map((x) => x.likes).reduce((a, b) => a + b, 0),
+      })
+    )
+    const result = like.find(
+      (x) => x.likes === Math.max(...like.map((x) => x.likes))
+    )
+
+    return result
+  } else {
+    return []
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 }
