@@ -1,0 +1,21 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Hello world",
+  "author": "Ting Chen",
+  "url": "http://localhost:3001/api/blogs",
+  "likes": 0
+}
+###
+GET http://localhost:3001/api/blogs
+###
+PUT http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "content":"VS is a good test tool",
+  "important":false
+}
+###
+DELETE http://localhost:3001/api/blogs
