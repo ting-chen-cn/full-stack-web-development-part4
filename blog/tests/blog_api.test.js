@@ -60,6 +60,14 @@ describe('tests for POST', () => {
     const titles = blogsAtEnd.map((n) => n.title)
     expect(titles).toContain('Hello world')
   })
+  test.only('if the title and url properties are missing, the app will response 400 status', async () => {
+    const newBlog1 = {
+      author: 'Ting Chen',
+      url: 'http://localhost:3001/api/blogs',
+      likes: 0,
+    }
+    await api.post('/api/blogs').send(newBlog1).expect(400)
+  })
 })
 
 test('the unique identifier of blogs is named id', async () => {
@@ -74,7 +82,7 @@ test('the unique identifier of blogs is named id', async () => {
   expect(idArray).toStrictEqual(blogsAtStart.map((r) => r.id))
 })
 
-test.only('if the likes property is missing, then is set default as 0', async () => {
+test('if the likes property is missing, then is set default as 0', async () => {
   const newBlog = {
     title: 'Hello world',
     author: 'Ting Chen',
