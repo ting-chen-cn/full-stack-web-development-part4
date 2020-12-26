@@ -4,6 +4,8 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const { forEach } = require('methods')
+const { expect } = require('@jest/globals')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -59,6 +61,18 @@ describe('tests for POST', () => {
     const titles = blogsAtEnd.map((n) => n.title)
     expect(titles).toContain('Hello world')
   })
+})
+
+test.only('the unique identifier of blogs is named id', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+
+  const promiseArray = blogsAtStart.map((r) =>
+    api.get(`/api/blogs/${r.id}`)
+  )
+  await Promise.all(promiseArray)
+  const idArray = promiseArray.map((r) => r.response.body.id)
+
+  expect(idArray).toStrictEqual(blogsAtStart.map((r) => r.id))
 })
 
 afterAll(() => {

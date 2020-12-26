@@ -6,17 +6,14 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-// blogsRouter.get('/:id', (request, response, next) => {
-//   Blog.findById(request.params.id)
-//     .then((blog) => {
-//       if (blog) {
-//         response.json(blog)
-//       } else {
-//         response.status(404).end()
-//       }
-//     })
-//     .catch((error) => next(error))
-// })
+blogsRouter.get('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (blog) {
+    response.json(blog)
+  } else {
+    response.status(404).end()
+  }
+})
 
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
@@ -24,13 +21,10 @@ blogsRouter.post('/', async (request, response) => {
   response.status(200).json(savedBlogs)
 })
 
-// blogsRouter.delete('/:id', (request, response, next) => {
-//   Blog.findByIdAndRemove(request.params.id)
-//     .then(() => {
-//       response.status(204).end()
-//     })
-//     .catch((error) => next(error))
-// })
+blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
 
 // blogsRouter.put('/:id', (request, response, next) => {
 //   const body = request.body
