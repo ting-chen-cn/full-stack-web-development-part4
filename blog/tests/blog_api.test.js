@@ -60,7 +60,7 @@ describe('tests for POST', () => {
     const titles = blogsAtEnd.map((n) => n.title)
     expect(titles).toContain('Hello world')
   })
-  test.only('if the title and url properties are missing, the app will response 400 status', async () => {
+  test('if the title and url properties are missing, the app will response 400 status', async () => {
     const newBlog1 = {
       author: 'Ting Chen',
       url: 'http://localhost:3001/api/blogs',
@@ -91,6 +91,21 @@ test('if the likes property is missing, then is set default as 0', async () => {
   const receiveMessage = await api.post('/api/blogs').send(newBlog)
   // const receivedBlog = api.get(`/api/blogs/${r.id}`)
   expect(receiveMessage.body.likes).toBe(0)
+})
+
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+  const titles = blogsAtEnd.map((r) => r.title)
+
+  expect(titles).not.toContain(blogToDelete.title)
 })
 
 afterAll(() => {
