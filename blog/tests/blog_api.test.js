@@ -4,7 +4,6 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { forEach } = require('methods')
 const { expect } = require('@jest/globals')
 
 beforeEach(async () => {
@@ -63,7 +62,7 @@ describe('tests for POST', () => {
   })
 })
 
-test.only('the unique identifier of blogs is named id', async () => {
+test('the unique identifier of blogs is named id', async () => {
   const blogsAtStart = await helper.blogsInDb()
 
   const promiseArray = blogsAtStart.map((r) =>
@@ -73,6 +72,17 @@ test.only('the unique identifier of blogs is named id', async () => {
   const idArray = promiseArray.map((r) => r.response.body.id)
 
   expect(idArray).toStrictEqual(blogsAtStart.map((r) => r.id))
+})
+
+test.only('if the likes property is missing, then is set default as 0', async () => {
+  const newBlog = {
+    title: 'Hello world',
+    author: 'Ting Chen',
+    url: 'http://localhost:3001/api/blogs',
+  }
+  const receiveMessage = await api.post('/api/blogs').send(newBlog)
+  // const receivedBlog = api.get(`/api/blogs/${r.id}`)
+  expect(receiveMessage.body.likes).toBe(0)
 })
 
 afterAll(() => {
