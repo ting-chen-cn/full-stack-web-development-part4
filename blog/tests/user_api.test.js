@@ -4,7 +4,6 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
-const { expect } = require('@jest/globals')
 
 beforeEach(async () => {
   await User.deleteMany({})
